@@ -1,18 +1,20 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const PATHS = {
-  app: path.join(__dirname, 'client/'),
-}
+// const PATHS = {
+//   app: path.join(__dirname, 'index.js'),
+// }
 
 module.exports = {
-  entry: PATHS.app,
+  mode: 'development',
+  entry: './index.js',
   output: {
     path: path.resolve(__dirname, './build/public/'),
     filename: 'index_bundle.js'
   },
   plugins: [new HtmlWebpackPlugin({
-    template: 'index.template.ejs',
+    template: path.resolve(__dirname, './index.template.ejs'),
+    filename: './index.html',
 
   })],
   module:{

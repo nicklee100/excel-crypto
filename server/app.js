@@ -13,6 +13,8 @@ app.use(bodyParser.json()); //required in parse incoming request
 
 app.use('/users', require('./routes/users'));
 
-app.listen(port);
+app.listen(port, function(){
+  console.log(`App running on port: ${port}`);
 
-console.log(`App running on port: ${port}`);
+});
+
