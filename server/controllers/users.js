@@ -6,7 +6,7 @@ signToken = user => {
   return JWT.sign(
     {
       iss: "NickLee",
-      sub: user.id,
+      sub: user.id,             // subject: Identifies the subject of the JWT
       iat: new Date().getTime(),
       expr: new Date().setDate(new Date().getDate() + 1)
     },
