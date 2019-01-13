@@ -1,7 +1,9 @@
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const GooglePlusTokenStrategy = require("passport-google-plus-token");
-
+const { ExtractJwt } = require("passport-jwt");
+const { JWT_SECRET } = require("./configuration/index.js");
+const { User } = require("./database/index.js");
 passport.use(
   "googleToken",
   new GooglePlusTokenStrategy(
@@ -15,3 +17,29 @@ passport.use(
     }
   )
 );
+
+passport.use(
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
+      secretOrKey: JWT_SECRET
+    },
+    async (payLoad, done) => {
+      //payload is signtoken in controllers/user.js
+      try {
+        const user = await User.findOne({
+          where: {
+            googleId: payLoad.sub
+          }
+        });
+        if (!user) {
+          // null
+          return done(null, false);
+        }
+        done(null, user);
+      } catch (error) {
+        done(error, false);
+      }
+    }
+  )
+); //middleware behavior simular express.js

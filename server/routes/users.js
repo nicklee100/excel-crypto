@@ -3,13 +3,19 @@ const UserController = require("../controllers/users.js");
 const passport = require("passport");
 require("../passport.js"); //load so it's aware
 
-router.route("/signup").get(function (req, res) {
+const passportJWT = passport.authenticate("jwt", { session: false });
+
+router.route("/signup").get(function(req, res) {
   res.send(200);
 });
 
-router.route("/oauth/google").post(
-  passport.authenticate("googleToken", { session: false }),
-  UserController.signIn
-);
+router.route("/secret").get(passportJWT, UserController.secret); //passportJWT refrences JwtStrategy in passport.js and user gets put on res.user
+
+router
+  .route("/oauth/google")
+  .post(
+    passport.authenticate("googleToken", { session: false }),
+    UserController.signIn
+  );
 
 module.exports = router;

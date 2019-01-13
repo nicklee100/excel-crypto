@@ -1,4 +1,4 @@
 Server Todo
-  - define google oauth strategy
   - persist google id
+  - create routes, db for user profile data/settings
 Client Todo:

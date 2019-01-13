@@ -1,5 +1,6 @@
 const JWT = require("jsonwebtoken");
 const { JWT_SECRET } = require("../configuration");
+const { User } = require("../database/index.js");
 
 signToken = user => {
   return JWT.sign(
@@ -16,7 +17,23 @@ signToken = user => {
 module.exports = {
   signIn: function(req, res, next) {
     // expecting an authorized user
+    User.findOrCreate({
+      where: { googleId: req.user.id },
+      defaults: {
+        displayName: req.user.displayName
+      }
+    }).spread((user, created) => {
+      if (created) {
+        console.log("created: ", created);
+      } else {
+        console.log("not created");
+      }
+    });
     const token = signToken(req.user);
     res.status(200).json({ token });
+  },
+  secret: function(req, res) {
+    console.log("resquest: ", req);
+    res.send({ secret: "Secret resource" });
   }
 };
