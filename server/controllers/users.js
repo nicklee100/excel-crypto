@@ -33,7 +33,6 @@ module.exports = {
     res.status(200).json({ token });
   },
   secret: function(req, res) {
-    console.log("resquest: ", req);
     res.send({ secret: "Secret resource" });
   }
 };
