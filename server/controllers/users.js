@@ -30,7 +30,9 @@ module.exports = {
       }
     });
     const token = signToken(req.user);
-    res.status(200).json({ token });
+    //res.status(200).send();
+    //res.status(200).json({token});
+    res.redirect(`http://localhost:8080/#/user/${req.user.id}`)
   },
   secret: function(req, res) {
     res.send({ secret: "Secret resource" });

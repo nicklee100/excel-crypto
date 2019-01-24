@@ -1,24 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter as Router, Route, Link } from "react-router-dom";
 import { map } from 'lodash'
+import { connect } from 'react-redux'
 
-export default class CurrencyChooser extends React.Component {
+import Header from "./Header.js";
+import User from "./User.js";
+import { initiateGoogleLogin } from "../redux/actions";
+
+class CurrencyChooser extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      currency: ['xrp', 'btc'],
-    }
+
   }
 
-  render() {
 
+  render() {
     return (
-      <div className="currency-chooser">
-        <h1>Currency</h1>
-        {
-          map(this.state.currency, item => <p key={item}>{item}</p> )
-        }
-      </div>
+      <Router>
+
+        <div>
+        <Link to="/user">Topics</Link>
+
+          <Route component={Header}/>
+          <Route path="/user/:id" component={User}/>
+
+        </div>
+      </Router>
+
     )
   }
 }
+
+
+const mapStateToProps = function(){
+  return {}
+}
+
+const mapDispatchToProps = function(dispatch) {
+  return {
+    initiateGoogleLogin: () => dispatch(initiateGoogleLogin()),
+
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(CurrencyChooser)

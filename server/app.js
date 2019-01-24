@@ -25,7 +25,8 @@ passport.use(
       callbackURL: "http://localhost:3000/oauth/google/getToken/redirect",
       clientID:
         "44043094992-tsmmdkf8hjs0j5f10eapp5q6g5ncf2pp.apps.googleusercontent.com",
-      clientSecret: process.env.GoogleClientSecret
+      clientSecret: process.env.GoogleClientSecret,
+      access_type: "offline"
     },
     (accessToken, rereshToken, profile, done) => {
       console.log(accessToken);
@@ -46,15 +47,18 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+
 app.get(
   "/oauth/google/getToken",
   passport.authenticate("google", {
     //returns access code
+    session: false,
     scope: ["profile"]
   })
 );
 app.get(
   "/oauth/google/getToken/redirect",
+  function(req,res,next){console.log('redirec hit'); next();},
   passport.authenticate("google"),
   signIn
 );

@@ -5,7 +5,13 @@ require("../passport.js"); //load so it's aware
 
 const passportJWT = passport.authenticate("jwt", { session: false });
 
+router.route("/authenticated/:id").get(function(req,res){
+  console.log('!Request: ', req.params);
+  res.send(200)
+})
+
 router.route("/signup").get(function(req, res) {
+  console.log("here");
   res.send(200);
 });
 
