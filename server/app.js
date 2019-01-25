@@ -64,6 +64,7 @@ app.get(
 );
 
 app.use("/users", require("./routes/users"));
+app.use("/authenticated", require("./routes/authentication"))
 
 app.listen(port, function() {
   console.log(`App running on port: ${port}`);

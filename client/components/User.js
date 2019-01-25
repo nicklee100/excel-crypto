@@ -7,12 +7,11 @@ class User extends React.Component {
   }
 
   componentDidMount(){
-    axios.get(`http://localhost:3000/users/authenticated/${this.props.match.params.id}`)
+    axios.get(`http://localhost:3000/authenticated/${this.props.match.params.id}`)
     .then(console.log)
   }
 
   render(){
-    console.log('user id: ', this.props.match.params.id);
 
     return (
       <div>
