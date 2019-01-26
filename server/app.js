@@ -3,8 +3,9 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 require("./passport.js"); //load so it's aware
+const cookieParser = require("cookie-parser");
 
-const { signIn } = require("./controllers/users.js");
+var sessions = require("client-sessions");
 
 const port = process.env.PORT || 3000;
 require("dotenv").config();
@@ -16,25 +17,15 @@ if (!process.env.NODE_ENV === "test") {
 }
 app.use(bodyParser.json()); //required in parse incoming request
 app.use(passport.initialize());
+// app.use(cookieParser())
+app.use(sessions({
+  cookieName: 'mySession', // cookie name dictates the key name added to the request object
+  secret: 'blargadeeblargblarg', // should be a large unguessable string
+  duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
+  activeDuration: 1000 * 60 * 5 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+}));
 /* Temparary Imports Brlow */
-const GoogleStrategy = require("passport-google-oauth20");
-const { JWT_SECRET } = require("./configuration/index.js");
-passport.use(
-  new GoogleStrategy(
-    {
-      callbackURL: "http://localhost:3000/oauth/google/getToken/redirect",
-      clientID:
-        "44043094992-tsmmdkf8hjs0j5f10eapp5q6g5ncf2pp.apps.googleusercontent.com",
-      clientSecret: process.env.GoogleClientSecret,
-      access_type: "offline"
-    },
-    (accessToken, rereshToken, profile, done) => {
-      console.log(accessToken);
-      console.log(profile);
-      done(null, profile);
-    }
-  )
-);
+
 
 passport.serializeUser(function(user, done) {
   console.log("**** User: ", user);
@@ -47,24 +38,8 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-
-app.get(
-  "/oauth/google/getToken",
-  passport.authenticate("google", {
-    //returns access code
-    session: false,
-    scope: ["profile"]
-  })
-);
-app.get(
-  "/oauth/google/getToken/redirect",
-  function(req,res,next){console.log('redirec hit'); next();},
-  passport.authenticate("google"),
-  signIn
-);
-
 app.use("/users", require("./routes/users"));
-app.use("/authenticated", require("./routes/authentication"))
+app.use("/authentication", require("./routes/authentication"))
 
 app.listen(port, function() {
   console.log(`App running on port: ${port}`);

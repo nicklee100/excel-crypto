@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
+import { CookiesProvider } from 'react-cookie';
 
 import App from './components/App.js';
 import rootReducer from  './redux/reducers'
@@ -15,8 +16,10 @@ let store = createStoreWithMiddleware(rootReducer)
 
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App/>
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  </CookiesProvider>,
   document.getElementById('root')
 );

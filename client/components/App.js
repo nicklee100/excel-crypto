@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 import { map } from 'lodash'
 import { connect } from 'react-redux'
+import { withCookies } from 'react-cookie';
 
 import Header from "./Header.js";
 import User from "./User.js";
@@ -18,23 +19,21 @@ class CurrencyChooser extends React.Component {
   render() {
     return (
       <Router>
-
         <div>
-        <Link to="/user">Topics</Link>
-
+          <Link to="/user">Topics</Link>=
           <Route component={Header}/>
-          <Route path="/user/:id" component={User}/>
-
+          <Route path="/user/:id" render={(props) =><User cookies={this.props.cookies} {...props}/> }/>
         </div>
       </Router>
-
     )
   }
 }
 
-
-const mapStateToProps = function(){
-  return {}
+const mapStateToProps = function(state, ownProps){
+  return {
+    state: state,
+    cookies: ownProps.cookies
+  }
 }
 
 const mapDispatchToProps = function(dispatch) {
@@ -43,4 +42,4 @@ const mapDispatchToProps = function(dispatch) {
 
   }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(CurrencyChooser)
+export default withCookies(connect(mapStateToProps,mapDispatchToProps)(CurrencyChooser))
