@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-
 class User extends React.Component {
   constructor(props){
     super(props)
@@ -9,9 +8,14 @@ class User extends React.Component {
 
   componentDidMount(){
     console.log('props: ', this.props);
-    axios.get(`http://localhost:3000/authentication/${this.props.match.params.id}`)
+    fetch(`http://localhost:3000/authentication/${this.props.match.params.id}`,{
+      credentials: 'include'
+    })
     .then(function(data){
       console.log('data: ', data)
+    })
+    .catch(function(err){
+      console.log("error: ", err);
     })
   }
 

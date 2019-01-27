@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 require("./passport.js"); //load so it's aware
 const cookieParser = require("cookie-parser");
+var cors = require('cors');
 
 var sessions = require("client-sessions");
 
@@ -11,13 +12,14 @@ const port = process.env.PORT || 3000;
 require("dotenv").config();
 
 const app = express();
+app.use(cors());
 
 if (!process.env.NODE_ENV === "test") {
   app.use(morgan("dev"));
 }
 app.use(bodyParser.json()); //required in parse incoming request
 app.use(passport.initialize());
-// app.use(cookieParser())
+ app.use(cookieParser())
 app.use(sessions({
   cookieName: 'mySession', // cookie name dictates the key name added to the request object
   secret: 'blargadeeblargblarg', // should be a large unguessable string

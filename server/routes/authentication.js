@@ -3,7 +3,24 @@ const JWT = require("jsonwebtoken");
 const { JWT_SECRET } = require("../configuration");
 const { signIn } = require("../controllers/users.js");
 const passport = require("passport");
+var cors = require('cors');
 
+var corsOptions = {
+  origin: 'http://localhost:8080',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+}
+
+passport.serializeUser(function(user, done) {
+  console.log("**** User: ", user);
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 const GoogleStrategy = require("passport-google-oauth20");
 passport.use(
   new GoogleStrategy(
@@ -35,12 +52,11 @@ signToken = googleId => {
 };
 
 router.route("/:googleId")
-  .get(function(req, res){
-
+  .get(cors(corsOptions),function(req, res){
     const token = signToken(req.params.googleId);
-    res.cookie('crypto',token, { expires: new Date(Date.now() + 900000), httpOnly: false }).send('worked')
-
-
+    res.cookie('crypto',token, { expires: new Date(Date.now() + 900000), httpOnly: false }).send()
+    //req.mySession.userid = token;
+    //res.sendStatus(200)
 })
 
 router.route("/google/getToken")
@@ -58,21 +74,3 @@ router.route("/google/getToken/redirect")
     signIn)
 
 module.exports = router;
-
-
-
-
-// app.get(
-//   "/oauth/google/getToken",
-//   passport.authenticate("google", {
-//     //returns access code
-//     session: false,
-//     scope: ["profile"]
-//   })
-// );
-// app.get(
-//   "/oauth/google/getToken/redirect",
-//   function(req,res,next){console.log('redirec hit'); next();},
-//   passport.authenticate("google"),
-//   signIn
-// );

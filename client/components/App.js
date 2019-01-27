@@ -22,7 +22,7 @@ class CurrencyChooser extends React.Component {
         <div>
           <Link to="/user">Topics</Link>=
           <Route component={Header}/>
-          <Route path="/user/:id" render={(props) =><User cookies={this.props.cookies} {...props}/> }/>
+          <Route path="/user/:id" render={(props) =><User  {...props}/> }/>
         </div>
       </Router>
     )
