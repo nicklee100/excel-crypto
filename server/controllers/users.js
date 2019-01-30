@@ -35,6 +35,6 @@ module.exports = {
     res.redirect(`http://localhost:8080/#/user/${req.user.id}`)
   },
   secret: function(req, res) {
-    res.send({ secret: "Secret resource" });
+    res.json({nick:'lee'});
   }
 };

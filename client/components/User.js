@@ -4,6 +4,7 @@ class User extends React.Component {
   constructor(props){
     super(props)
     this.returnCookie = this.returnCookie.bind(this);
+    this.getSecret = this.getSecret.bind(this);
   }
 
   componentDidMount(){
@@ -20,7 +21,17 @@ class User extends React.Component {
   }
 
   returnCookie(){
-    console.log(this.props.cookies.get('crypto'));
+    console.log(this.props.cookies.cookies['crypto']);
+  }
+
+  getSecret(){
+    fetch(`http://localhost:3000/users/secret`,{
+      credentials: 'include'
+    })
+    .then(response=>response.json())
+    .then(data => {console.log(data)})
+    .catch(err => {console.log('error:', err)})
+
   }
 
   render(){
@@ -29,6 +40,7 @@ class User extends React.Component {
       <div>
         <h1>User loaded</h1>
         <button onClick={this.returnCookie}>log cookie</button>
+        <button onClick={this.getSecret}> Get Secret </button>
       </div>
 
     )

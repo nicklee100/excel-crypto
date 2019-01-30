@@ -17,11 +17,18 @@ passport.use(
     }
   )
 );
-
+var cookieExtractor = function(req) {
+  var token = null;
+  if (req && req.cookies)
+  {
+      token = req.cookies['crypto'];
+  }
+  return token;
+};
 passport.use(
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
+      jwtFromRequest: cookieExtractor,
       secretOrKey: JWT_SECRET
     },
     async (payLoad, done) => {
